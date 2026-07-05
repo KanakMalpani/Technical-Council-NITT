@@ -11,7 +11,12 @@ Public submission repository for Technical Council Inductions 2026.
 
 ## Software Live Demo
 
-Deploy CampusPulse from `Software/READY_TO_SEND/campuspulse/` and add the live link here after hosting.
+- **Primary (Railway):** https://campuspulse-nitt-production.up.railway.app
+- **Backup (Vercel):** https://campuspulse-chi.vercel.app
+
+## GitHub Repository
+
+https://github.com/KanakMalpani/Technical-Council-NITT
 
 ## External Links
 

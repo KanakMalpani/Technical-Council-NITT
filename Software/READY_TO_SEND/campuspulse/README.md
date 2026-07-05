@@ -189,6 +189,11 @@ docker run -p 3000:3000 campuspulse
 3. Set the service port to `3000`.
 4. Replace the JSON file with PostgreSQL or another database if the project grows beyond prototype scale.
 
+## Live Deployment
+
+- **Railway:** https://campuspulse-nitt-production.up.railway.app
+- **Vercel:** https://campuspulse-chi.vercel.app
+
 ## Future Scope
 
 - NITT email login.

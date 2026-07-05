@@ -15,7 +15,10 @@ const {
 const PORT = Number(process.env.PORT || 3000);
 const ROOT = __dirname;
 const PUBLIC_DIR = path.join(ROOT, "public");
-const DATA_FILE = path.join(ROOT, "data", "issues.json");
+const SEED_DATA_FILE = path.join(ROOT, "data", "issues.json");
+const DATA_FILE = process.env.VERCEL
+  ? path.join("/tmp", "issues.json")
+  : SEED_DATA_FILE;
 
 const CONTENT_TYPES = {
   ".html": "text/html; charset=utf-8",
@@ -27,7 +30,21 @@ const CONTENT_TYPES = {
   ".ico": "image/x-icon"
 };
 
+async function ensureDataFile() {
+  if (!process.env.VERCEL) {
+    return;
+  }
+
+  try {
+    await fs.access(DATA_FILE);
+  } catch {
+    const seed = await fs.readFile(SEED_DATA_FILE, "utf8");
+    await fs.writeFile(DATA_FILE, seed);
+  }
+}
+
 async function readIssues() {
+  await ensureDataFile();
   const raw = await fs.readFile(DATA_FILE, "utf8");
   return JSON.parse(raw);
 }
@@ -201,6 +218,10 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => {
-  console.log(`CampusPulse running at http://localhost:${PORT}`);
-});
+module.exports = server;
+
+if (require.main === module) {
+  server.listen(PORT, () => {
+    console.log(`CampusPulse running at http://localhost:${PORT}`);
+  });
+}
