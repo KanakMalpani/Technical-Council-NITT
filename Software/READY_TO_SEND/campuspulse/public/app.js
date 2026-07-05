@@ -1,5 +1,3 @@
-import * as THREE from "./vendor/three.module.min.js";
-
 const state = {
   issues: [],
   selectedId: undefined
@@ -26,7 +24,6 @@ const els = {
   resolutionRate: document.querySelector("#resolutionRate"),
   resolvedCount: document.querySelector("#resolvedCount"),
   search: document.querySelector("#search"),
-  signalScene: document.querySelector("#signalScene"),
   sortBy: document.querySelector("#sortBy"),
   statusFilter: document.querySelector("#statusFilter"),
   statusForm: document.querySelector("#statusForm"),
@@ -38,165 +35,132 @@ const els = {
   voteCount: document.querySelector("#voteCount")
 };
 
-const APPLE_BEATS = [
-  {
-    kicker: "Step one",
-    headline: "Report what you see.",
-    subhead: "Students raise campus signals with location, category, and context in seconds.",
-    cardTitle: "Raise a signal",
-    cardCopy: "Every report enters the public tracker with a timestamp and timeline."
-  },
-  {
-    kicker: "Step two",
-    headline: "Vote on what matters.",
-    subhead: "Community votes help Technical Council understand which issues need attention first.",
-    cardTitle: "One tap to vote",
-    cardCopy: "Votes feed directly into the priority score for each campus signal."
-  },
-  {
-    kicker: "Step three",
-    headline: "Prioritize with clarity.",
-    subhead: "CampusPulse scores urgency using votes, age, and status so the right issues surface.",
-    cardTitle: "Smart priority scoring",
-    cardCopy: "Filter, search, and sort the tracker to focus on the highest-impact signals."
-  },
-  {
-    kicker: "Step four",
-    headline: "Track until resolved.",
-    subhead: "Volunteers update status, add notes, and keep every step visible to students.",
-    cardTitle: "Transparent timelines",
-    cardCopy: "From Reported to Resolved, nothing disappears into informal channels."
-  }
-];
-
-const appleEls = {
-  track: document.querySelector("#appleScrollTrack"),
-  kicker: document.querySelector("[data-apple-kicker]"),
-  headline: document.querySelector("[data-apple-headline]"),
-  subhead: document.querySelector("[data-apple-subhead]"),
-  cardTitle: document.querySelector("[data-apple-card-title]"),
-  cardCopy: document.querySelector("[data-apple-card-copy]"),
-  metricA: document.querySelector("[data-apple-metric-a]"),
-  metricB: document.querySelector("[data-apple-metric-b]"),
-  metricC: document.querySelector("[data-apple-metric-c]"),
-  steps: [...document.querySelectorAll(".apple-step")]
+const showcaseStats = {
+  total: 0,
+  open: 0,
+  resolved: 0,
+  resolutionRate: 0,
+  votes: 0,
+  topIssue: "Loading top priority signal…",
+  topCategory: "—",
+  averagePriority: 0
 };
 
-function initSignalScene() {
-  const canvas = els.signalScene;
-  if (!canvas || !window.WebGLRenderingContext) return;
+const productEls = {
+  cinema: document.querySelector("#productCinema"),
+  deviceWrap: document.querySelector("#productDeviceWrap"),
+  screen: document.querySelector("#productScreen"),
+  sceneCopies: [...document.querySelectorAll(".scene-copy")],
+  scenePills: [...document.querySelectorAll(".scene-pill")],
+  statSignals: document.querySelector("#showcaseStatSignals"),
+  statVotes: document.querySelector("#showcaseStatVotes"),
+  statRate: document.querySelector("#showcaseStatRate"),
+  topIssueFoot: document.querySelector("#showcaseTopIssue"),
+  mainContent: document.querySelector("#mainContent")
+};
 
-  const renderer = new THREE.WebGLRenderer({
-    canvas,
-    alpha: true,
-    antialias: true,
-    preserveDrawingBuffer: true
-  });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+const PRODUCT_SCENE_COUNT = productEls.sceneCopies.length || 5;
 
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
-  camera.position.set(0, 0.4, 9);
+function mockChrome(label = "Live preview") {
+  return `
+    <div class="mock-bar">
+      <div class="mock-bar-left">
+        <span class="mock-dot"></span>
+        <span class="mock-dot"></span>
+        <span class="mock-dot"></span>
+        <span class="mock-title">CampusPulse</span>
+      </div>
+      <span class="mock-badge">${label}</span>
+    </div>
+  `;
+}
 
-  const group = new THREE.Group();
-  scene.add(group);
+function renderProductMockScene(index) {
+  const stats = showcaseStats;
 
-  const colors = [0x147c72, 0xe85d4f, 0xc7df5f, 0xf4b63f, 0x3c6e91];
-  const nodeGeometry = new THREE.IcosahedronGeometry(0.075, 2);
-  const nodes = [];
-  const nodePositions = [];
+  const scenes = [
+    `<div class="mock-shell">
+      ${mockChrome("New signal")}
+      <div class="mock-card">
+        <strong>Raise a campus signal</strong>
+        <p>Describe what you see and where it is happening.</p>
+      </div>
+      <div class="mock-fields">
+        <div class="mock-field"><span>Title</span><em>Broken projector in LH-204</em></div>
+        <div class="mock-field"><span>Location</span><em>Lecture Hall Block · LH-204</em></div>
+        <div class="mock-field"><span>Category</span><em>Infrastructure</em></div>
+      </div>
+      <button class="mock-btn" type="button">Submit signal</button>
+    </div>`,
+    `<div class="mock-shell">
+      ${mockChrome("Community vote")}
+      <div class="mock-list">
+        <div class="mock-list-item">
+          <div>
+            <strong>Water leakage near hostel block</strong>
+            <span>42 votes · Open</span>
+          </div>
+          <div class="mock-score"><span>Score</span><b>88</b></div>
+        </div>
+        <div class="mock-list-item">
+          <div>
+            <strong>Wi‑Fi dead zone in library</strong>
+            <span>31 votes · Triaged</span>
+          </div>
+          <div class="mock-score"><span>Score</span><b>74</b></div>
+        </div>
+      </div>
+      <button class="mock-btn" type="button">Vote for this signal</button>
+    </div>`,
+    `<div class="mock-shell">
+      ${mockChrome("Priority board")}
+      <div class="mock-metrics">
+        <div><span>Open</span><strong>${stats.open}</strong></div>
+        <div><span>Resolved</span><strong>${stats.resolved}</strong></div>
+        <div><span>Avg priority</span><strong>${stats.averagePriority}</strong></div>
+      </div>
+      <div class="mock-card">
+        <strong>${escapeHtml(stats.topIssue)}</strong>
+        <p>Top category: ${escapeHtml(stats.topCategory)} · sorted by urgency</p>
+      </div>
+      <div class="mock-row">
+        <span class="mock-chip accent">Highest impact</span>
+        <span class="mock-chip">Sort by priority</span>
+      </div>
+    </div>`,
+    `<div class="mock-shell">
+      ${mockChrome("Timeline")}
+      <div class="mock-timeline">
+        <div class="mock-step"><span>Reported</span><strong>Signal submitted by student</strong></div>
+        <div class="mock-step"><span>Triaged</span><strong>Issue reviewed by volunteer</strong></div>
+        <div class="mock-step"><span>In progress</span><strong>Maintenance team assigned</strong></div>
+      </div>
+      <div class="mock-card">
+        <strong>Volunteer note</strong>
+        <p>ETA shared with students. Updates stay visible to everyone.</p>
+      </div>
+    </div>`,
+    `<div class="mock-shell">
+      ${mockChrome("Resolution runway")}
+      <div class="mock-metrics">
+        <div><span>Signals</span><strong>${stats.total}</strong></div>
+        <div><span>Votes</span><strong>${stats.votes}</strong></div>
+        <div><span>Resolved</span><strong>${stats.resolutionRate}%</strong></div>
+      </div>
+      <div class="mock-row">
+        <span class="mock-chip">Reported</span>
+        <span class="mock-chip">Triaged</span>
+        <span class="mock-chip accent">In Progress</span>
+        <span class="mock-chip">Resolved</span>
+      </div>
+      <div class="mock-card">
+        <strong>Campus improvement, end to end</strong>
+        <p>Nothing disappears into informal channels.</p>
+      </div>
+    </div>`
+  ];
 
-  for (let i = 0; i < 54; i++) {
-    const ring = i % 3;
-    const angle = i * 0.72;
-    const radius = 1.3 + ring * 0.55 + Math.sin(i * 1.7) * 0.18;
-    const x = Math.cos(angle) * radius;
-    const y = Math.sin(i * 0.41) * 1.05;
-    const z = Math.sin(angle) * radius;
-    const material = new THREE.MeshStandardMaterial({
-      color: colors[i % colors.length],
-      emissive: colors[i % colors.length],
-      emissiveIntensity: 0.22,
-      roughness: 0.42,
-      metalness: 0.08
-    });
-    const mesh = new THREE.Mesh(nodeGeometry, material);
-    mesh.position.set(x, y, z);
-    mesh.userData.phase = i * 0.31;
-    nodes.push(mesh);
-    nodePositions.push(mesh.position.clone());
-    group.add(mesh);
-  }
-
-  const lineMaterial = new THREE.LineBasicMaterial({
-    color: 0x147c72,
-    transparent: true,
-    opacity: 0.18
-  });
-  const linePoints = [];
-  for (let i = 0; i < nodePositions.length; i++) {
-    for (let j = i + 1; j < nodePositions.length; j++) {
-      const distance = nodePositions[i].distanceTo(nodePositions[j]);
-      if (distance > 0.76 && distance < 1.24 && linePoints.length < 360) {
-        linePoints.push(nodePositions[i], nodePositions[j]);
-      }
-    }
-  }
-  const lineGeometry = new THREE.BufferGeometry().setFromPoints(linePoints);
-  group.add(new THREE.LineSegments(lineGeometry, lineMaterial));
-
-  const ringMaterial = new THREE.MeshStandardMaterial({
-    color: 0xc7df5f,
-    emissive: 0xc7df5f,
-    emissiveIntensity: 0.18,
-    transparent: true,
-    opacity: 0.72,
-    roughness: 0.28
-  });
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(2.15, 0.018, 12, 140), ringMaterial);
-  ring.rotation.x = Math.PI / 2.9;
-  group.add(ring);
-
-  scene.add(new THREE.AmbientLight(0xf7f2e8, 1.4));
-  const key = new THREE.DirectionalLight(0xffffff, 1.6);
-  key.position.set(3, 4, 5);
-  scene.add(key);
-
-  const pointer = { x: 0, y: 0 };
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  function resize() {
-    const rect = canvas.getBoundingClientRect();
-    const width = Math.max(1, Math.floor(rect.width));
-    const height = Math.max(1, Math.floor(rect.height));
-    renderer.setSize(width, height, false);
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-  }
-
-  canvas.addEventListener("pointermove", event => {
-    const rect = canvas.getBoundingClientRect();
-    pointer.x = ((event.clientX - rect.left) / rect.width - 0.5) * 0.55;
-    pointer.y = ((event.clientY - rect.top) / rect.height - 0.5) * 0.4;
-  });
-
-  window.addEventListener("resize", resize);
-  resize();
-
-  function render(time = 0) {
-    const t = time * 0.001;
-    group.rotation.y += ((0.24 + pointer.x) - group.rotation.y) * 0.018;
-    group.rotation.x += ((-0.14 + pointer.y) - group.rotation.x) * 0.018;
-    ring.rotation.z = t * 0.22;
-    nodes.forEach(node => {
-      const pulse = 1 + Math.sin(t * 2.1 + node.userData.phase) * 0.18;
-      node.scale.setScalar(pulse);
-    });
-    renderer.render(scene, camera);
-    if (!reduceMotion) requestAnimationFrame(render);
-  }
-
-  render();
+  return scenes[index] || scenes[0];
 }
 
 async function api(path, options = {}) {
@@ -258,7 +222,7 @@ function renderStats(stats) {
   els.voteCount.textContent = stats.votes;
   els.averagePriority.textContent = stats.averagePriority;
   renderRunway(stats);
-  updateAppleShowcase(stats);
+  updateProductShowcase(stats);
 }
 
 function renderRunway(stats) {
@@ -379,20 +343,116 @@ async function refresh() {
   renderIssues();
 }
 
-function updateAppleShowcase(stats) {
-  if (!appleEls.metricA) return;
-  appleEls.metricA.textContent = stats.total;
-  appleEls.metricB.textContent = stats.open;
-  appleEls.metricC.textContent = stats.resolved;
-  if (stats.topIssue && stats.topIssue !== "Loading...") {
-    APPLE_BEATS[2].cardTitle = stats.topIssue;
-    APPLE_BEATS[2].cardCopy = `Top category: ${stats.topCategory}. Live priority scoring keeps the most urgent campus signals visible.`;
+function updateProductShowcase(stats) {
+  Object.assign(showcaseStats, stats);
+  if (productEls.statSignals) productEls.statSignals.textContent = stats.total;
+  if (productEls.statVotes) productEls.statVotes.textContent = stats.votes;
+  if (productEls.statRate) productEls.statRate.textContent = `${stats.resolutionRate}%`;
+  if (productEls.topIssueFoot && stats.topIssue && stats.topIssue !== "Loading...") {
+    productEls.topIssueFoot.textContent = `Top priority right now: ${stats.topIssue} (${stats.topCategory}).`;
+  }
+  if (productSceneState.lastRenderedScene >= 0) {
+    productSceneState.lastRenderedScene = -1;
+    applyProductScene(productSceneState.index, productSceneState.local, productSceneState.progress);
   }
 }
 
-function initAppleScroll() {
-  if (!appleEls.track || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    applyAppleBeat(0);
+const productSceneState = {
+  index: 0,
+  local: 0,
+  progress: 0,
+  lastRenderedScene: -1
+};
+
+function getCinemaProgress() {
+  const cinema = productEls.cinema;
+  if (!cinema) return 0;
+
+  const scrollRange = cinema.offsetHeight - window.innerHeight;
+  if (scrollRange <= 0) return 0;
+
+  const rect = cinema.getBoundingClientRect();
+  return Math.min(1, Math.max(0, -rect.top / scrollRange));
+}
+
+function applyProductScene(index, local = 0, progress = 0) {
+  productSceneState.index = index;
+  productSceneState.local = local;
+  productSceneState.progress = progress;
+
+  const fade = 1 - Math.min(1, Math.abs(local - 0.5) * 2);
+  const y = (0.5 - local) * 18;
+  const scale = 0.92 + fade * 0.08;
+  const tiltY = -10 + progress * 4;
+  const tiltX = 5 - fade * 2;
+
+  if (productEls.deviceWrap) {
+    productEls.deviceWrap.style.setProperty("--device-y", `${y}px`);
+    productEls.deviceWrap.style.setProperty("--device-scale", String(scale));
+    productEls.deviceWrap.style.setProperty("--device-tilt-x", `${tiltX}deg`);
+    productEls.deviceWrap.style.setProperty("--device-tilt-y", `${tiltY}deg`);
+  }
+
+  const t = index + local;
+  productEls.sceneCopies.forEach((copy, i) => {
+    const dist = Math.abs(t - i - 0.5);
+    const opacity = Math.max(0, 1 - dist * 1.15);
+    const copyY = (i - t) * 28;
+    const copyScale = 0.96 + opacity * 0.04;
+    const isActive = opacity > 0.45;
+    copy.style.opacity = String(opacity);
+    copy.style.transform = `translateY(${copyY}px) scale(${copyScale})`;
+    copy.style.visibility = opacity > 0.02 ? "visible" : "hidden";
+    copy.classList.toggle("is-active", isActive);
+    copy.style.zIndex = isActive ? "2" : "1";
+  });
+
+  productEls.scenePills.forEach((pill, i) => {
+    pill.classList.toggle("is-active", i === index);
+  });
+
+  if (productEls.screen) {
+    if (index !== productSceneState.lastRenderedScene) {
+      if (productSceneState.lastRenderedScene === -1) {
+        productEls.screen.innerHTML = renderProductMockScene(index);
+        productSceneState.lastRenderedScene = index;
+        productEls.screen.style.setProperty("--screen-opacity", "1");
+        productEls.screen.style.setProperty("--screen-y", "0");
+      } else {
+        productEls.screen.style.setProperty("--screen-opacity", "0");
+        productEls.screen.style.setProperty("--screen-y", "12px");
+        window.setTimeout(() => {
+          if (productSceneState.index !== index) return;
+          productEls.screen.innerHTML = renderProductMockScene(index);
+          productSceneState.lastRenderedScene = index;
+          productEls.screen.style.setProperty("--screen-opacity", "1");
+          productEls.screen.style.setProperty("--screen-y", "0");
+        }, 120);
+      }
+    } else {
+      productEls.screen.style.setProperty("--screen-opacity", String(0.72 + fade * 0.28));
+      productEls.screen.style.setProperty("--screen-y", `${(0.5 - local) * 8}px`);
+    }
+  }
+}
+
+function initProductScroll() {
+  if (!productEls.cinema) return;
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion) {
+    applyProductScene(0, 0.5, 0);
+    productEls.sceneCopies.forEach((copy, i) => {
+      copy.classList.toggle("is-active", i === 0);
+      copy.style.opacity = i === 0 ? "1" : "0";
+      copy.style.visibility = i === 0 ? "visible" : "hidden";
+      copy.style.transform = i === 0 ? "translateY(0) scale(1)" : "translateY(24px) scale(0.98)";
+    });
+    productEls.scenePills.forEach((pill, i) => pill.classList.toggle("is-active", i === 0));
+    if (productEls.screen) {
+      productEls.screen.innerHTML = renderProductMockScene(0);
+      productSceneState.lastRenderedScene = 0;
+    }
     return;
   }
 
@@ -400,14 +460,14 @@ function initAppleScroll() {
 
   function update() {
     ticking = false;
-    const rect = appleEls.track.getBoundingClientRect();
-    const scrollable = appleEls.track.offsetHeight - window.innerHeight;
-    if (scrollable <= 0) return;
+    const progress = getCinemaProgress();
+    if (progress <= 0 && productEls.cinema.getBoundingClientRect().bottom < 0) {
+      return;
+    }
 
-    const progress = Math.min(1, Math.max(0, -rect.top / scrollable));
-    const stepIndex = Math.min(APPLE_BEATS.length - 1, Math.floor(progress * APPLE_BEATS.length));
-    const local = (progress * APPLE_BEATS.length) - stepIndex;
-    applyAppleBeat(stepIndex, local);
+    const sceneIndex = Math.min(PRODUCT_SCENE_COUNT - 1, Math.floor(progress * PRODUCT_SCENE_COUNT));
+    const local = (progress * PRODUCT_SCENE_COUNT) - sceneIndex;
+    applyProductScene(sceneIndex, local, progress);
   }
 
   function onScroll() {
@@ -418,32 +478,20 @@ function initAppleScroll() {
   }
 
   window.addEventListener("scroll", onScroll, { passive: true });
-  update();
+  window.addEventListener("resize", onScroll, { passive: true });
+  requestAnimationFrame(update);
 }
 
-function applyAppleBeat(index, local = 0) {
-  const beat = APPLE_BEATS[index];
-  if (!beat) return;
+function initDashboardMode() {
+  if (!productEls.mainContent) return;
 
-  appleEls.kicker.textContent = beat.kicker;
-  appleEls.headline.textContent = beat.headline;
-  appleEls.subhead.textContent = beat.subhead;
-  appleEls.cardTitle.textContent = beat.cardTitle;
-  appleEls.cardCopy.textContent = beat.cardCopy;
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      document.body.classList.toggle("dashboard-mode", entry.isIntersecting && entry.intersectionRatio > 0.08);
+    });
+  }, { threshold: [0, 0.08, 0.2] });
 
-  appleEls.steps.forEach((step, i) => {
-    step.classList.toggle("is-active", i === index);
-  });
-
-  const fade = 1 - Math.min(1, Math.abs(local - 0.5) * 2);
-  const y = (0.5 - local) * 28;
-  const scale = 0.96 + fade * 0.04;
-  appleEls.track.style.setProperty("--apple-copy-opacity", String(0.35 + fade * 0.65));
-  appleEls.track.style.setProperty("--apple-copy-y", `${y}px`);
-  appleEls.track.style.setProperty("--apple-headline-scale", String(scale));
-  appleEls.track.style.setProperty("--apple-device-y", `${y * 0.6}px`);
-  appleEls.track.style.setProperty("--apple-device-scale", String(0.94 + fade * 0.06));
-  appleEls.track.style.setProperty("--apple-device-opacity", String(0.5 + fade * 0.5));
+  observer.observe(productEls.mainContent);
 }
 
 function initRevealOnScroll() {
@@ -543,8 +591,34 @@ els.closeDetail.addEventListener("click", () => {
 });
 els.search.addEventListener("input", debounce(refresh));
 
-initSignalScene();
-initAppleScroll();
+const THEME_STORAGE_KEY = "campuspulse-theme";
+
+function initThemeToggle() {
+  const toggle = document.querySelector("#themeToggle");
+  if (!toggle) return;
+
+  const label = toggle.querySelector(".theme-toggle-label");
+
+  function applyTheme(isLight) {
+    document.documentElement.classList.toggle("light-mode", isLight);
+    toggle.setAttribute("aria-pressed", String(isLight));
+    toggle.setAttribute("aria-label", isLight ? "Switch to dark mode" : "Switch to light mode");
+    if (label) label.textContent = isLight ? "Dark" : "Light";
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, isLight ? "light" : "dark");
+    } catch (error) {}
+  }
+
+  applyTheme(document.documentElement.classList.contains("light-mode"));
+
+  toggle.addEventListener("click", () => {
+    applyTheme(!document.documentElement.classList.contains("light-mode"));
+  });
+}
+
+initThemeToggle();
+initProductScroll();
+initDashboardMode();
 initRevealOnScroll();
 refresh().catch(error => {
   els.issueList.innerHTML = `<p class="empty">${escapeHtml(error.message)}</p>`;

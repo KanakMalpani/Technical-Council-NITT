@@ -7,11 +7,18 @@
     <title>CampusPulse | CDI Tracker</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/styles.css">
+    <script>
+      try {
+        if (localStorage.getItem("campuspulse-theme") === "light") {
+          document.documentElement.classList.add("light-mode");
+        }
+      } catch (error) {}
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#mainContent">Skip to tracker</a>
 
-    <header class="topbar">
+    <header class="topbar topbar-product">
       <div class="brand">
         <span class="brand-mark" aria-hidden="true">CP</span>
         <div>
@@ -20,67 +27,139 @@
         </div>
       </div>
       <div class="topbar-actions">
-        <a class="button ghost" id="csvLink" href="/api/issues.csv">Export CSV</a>
-        <a class="button dark" href="#newReport">New signal</a>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false" aria-label="Switch to light mode">
+          <span class="theme-toggle-icon" aria-hidden="true">◐</span>
+          <span class="theme-toggle-label">Light</span>
+        </button>
+        <a class="button ghost product-nav-btn" id="csvLink" href="/api/issues.csv">Export CSV</a>
+        <a class="button dark product-nav-btn" href="#mainContent">Dashboard</a>
       </div>
     </header>
 
-    <section class="apple-showcase" aria-label="CampusPulse product overview">
-      <div class="apple-scroll-track" id="appleScrollTrack">
-        <div class="apple-sticky">
-          <div class="apple-stage">
-            <p class="apple-kicker" data-apple-kicker>Campus Development Initiative</p>
-            <h2 class="apple-headline" data-apple-headline>Report. Vote. Track.</h2>
-            <p class="apple-subhead" data-apple-subhead>CampusPulse turns everyday campus problems into visible, student-led improvements at NIT Trichy.</p>
+    <div class="product-experience" id="productExperience">
+      <section class="product-hero" aria-label="CampusPulse introduction">
+        <p class="product-hero-name">CampusPulse</p>
+        <h1 class="product-hero-line">Campus problems.<br>Visible progress.</h1>
+        <p class="product-hero-sub">Report, prioritize, and track campus improvement signals — built for NIT Trichy.</p>
+        <div class="product-hero-cta">
+          <a class="product-btn" href="#mainContent">Open dashboard</a>
+          <a class="product-link" href="#productHighlights">See highlights ›</a>
+        </div>
+      </section>
 
-            <div class="apple-device" data-apple-device>
-              <div class="apple-device-screen">
-                <div class="apple-metric-row">
-                  <div><span>Signals</span><strong data-apple-metric-a>—</strong></div>
-                  <div><span>Open</span><strong data-apple-metric-b>—</strong></div>
-                  <div><span>Resolved</span><strong data-apple-metric-c>—</strong></div>
+      <section class="product-highlights" id="productHighlights" aria-label="CampusPulse highlights">
+        <h2>Get the highlights.</h2>
+        <div class="highlight-grid">
+          <article class="highlight-card">
+            <span class="highlight-label">Report</span>
+            <strong>Raise a campus signal in under a minute.</strong>
+            <p>Title, location, category, and description — every report enters the public tracker with a timestamp.</p>
+          </article>
+          <article class="highlight-card">
+            <span class="highlight-label">Vote</span>
+            <strong>Students decide what matters most.</strong>
+            <p>Community votes feed directly into each signal&apos;s priority score.</p>
+          </article>
+          <article class="highlight-card">
+            <span class="highlight-label">Track</span>
+            <strong>Filter, search, and sort the live tracker.</strong>
+            <p>See open issues, top categories, and the highest-priority signal at a glance.</p>
+          </article>
+          <article class="highlight-card">
+            <span class="highlight-label">Resolve</span>
+            <strong>Transparent timelines from report to done.</strong>
+            <p>Volunteers update status, add notes, and keep progress visible to everyone.</p>
+          </article>
+        </div>
+      </section>
+
+      <div class="product-cinema" id="productCinema" style="--scene-count: 5; --scene-scroll: 145vh">
+        <div class="product-cinema-glow" aria-hidden="true"></div>
+        <div class="product-cinema-sticky">
+          <div class="product-device-wrap" id="productDeviceWrap">
+            <div class="product-laptop" aria-hidden="true">
+              <div class="product-laptop-lid">
+                <div class="product-laptop-bezel">
+                  <span class="product-laptop-camera"></span>
+                  <div class="product-laptop-screen">
+                    <div class="product-screen-inner" id="productScreen"></div>
+                    <div class="product-screen-shine" aria-hidden="true"></div>
+                  </div>
                 </div>
-                <div class="apple-device-card" data-apple-card>
-                  <span class="apple-device-label">Live campus signal</span>
-                  <strong data-apple-card-title>Loading priority issue…</strong>
-                  <p data-apple-card-copy>Priority scoring combines votes, age, and status so the right issues surface first.</p>
-                </div>
+              </div>
+              <div class="product-laptop-hinge" aria-hidden="true"></div>
+              <div class="product-laptop-base">
+                <span class="product-laptop-trackpad" aria-hidden="true"></span>
               </div>
             </div>
           </div>
-
-          <div class="apple-steps" aria-hidden="true">
-            <article class="apple-step is-active" data-step="0">
-              <span>01</span>
-              <strong>Report</strong>
-            </article>
-            <article class="apple-step" data-step="1">
-              <span>02</span>
-              <strong>Vote</strong>
-            </article>
-            <article class="apple-step" data-step="2">
-              <span>03</span>
-              <strong>Prioritize</strong>
-            </article>
-            <article class="apple-step" data-step="3">
-              <span>04</span>
-              <strong>Resolve</strong>
-            </article>
+          <div class="product-scene-panel">
+            <div class="product-scene-copy" id="productSceneCopy">
+              <article class="scene-copy" data-scene="0">
+                <p class="scene-eyebrow">Report</p>
+                <h3>See it. Say it.</h3>
+                <p>Students raise campus signals with location, category, and context. Every report enters the public tracker instantly.</p>
+              </article>
+              <article class="scene-copy" data-scene="1">
+                <p class="scene-eyebrow">Vote</p>
+                <h3>Your vote sets priority.</h3>
+                <p>Community votes tell Technical Council what needs attention first — no more lost WhatsApp complaints.</p>
+              </article>
+              <article class="scene-copy" data-scene="2">
+                <p class="scene-eyebrow">Prioritize</p>
+                <h3>Smart scoring. Clear order.</h3>
+                <p>CampusPulse ranks urgency using votes, age, and status so the right issues surface every time.</p>
+              </article>
+              <article class="scene-copy" data-scene="3">
+                <p class="scene-eyebrow">Timeline</p>
+                <h3>Every step, visible.</h3>
+                <p>Status updates and volunteer notes build a transparent timeline students can actually follow.</p>
+              </article>
+              <article class="scene-copy" data-scene="4">
+                <p class="scene-eyebrow">Resolve</p>
+                <h3>From signal to solved.</h3>
+                <p>Track resolution rate, category heat, and the full runway from Reported to Resolved.</p>
+              </article>
+            </div>
+            <div class="product-scene-progress" id="productSceneProgress" aria-hidden="true">
+              <span class="scene-pill is-active" data-scene="0"></span>
+              <span class="scene-pill" data-scene="1"></span>
+              <span class="scene-pill" data-scene="2"></span>
+              <span class="scene-pill" data-scene="3"></span>
+              <span class="scene-pill" data-scene="4"></span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="apple-handoff">
-        <p class="eyebrow">Operational dashboard</p>
-        <h2>Everything you need to run campus improvement in one place.</h2>
-        <p>Scroll into the live tracker to report issues, filter signals, update status, and follow timelines.</p>
-        <a class="button dark" href="#mainContent">Open dashboard</a>
-      </div>
-    </section>
+      <section class="product-impact" aria-label="CampusPulse impact">
+        <h2>Impact at a glance.</h2>
+        <div class="impact-grid">
+          <article>
+            <strong id="showcaseStatSignals">0</strong>
+            <span>campus signals tracked</span>
+          </article>
+          <article>
+            <strong id="showcaseStatVotes">0</strong>
+            <span>student votes counted</span>
+          </article>
+          <article>
+            <strong id="showcaseStatRate">0%</strong>
+            <span>resolution rate</span>
+          </article>
+        </div>
+        <p class="impact-foot" id="showcaseTopIssue">Loading top priority signal…</p>
+      </section>
+
+      <section class="product-bridge">
+        <h2>Ready to use CampusPulse?</h2>
+        <p>Scroll into the live dashboard to report issues, vote, filter signals, and follow timelines.</p>
+        <a class="product-btn" href="#mainContent">Enter live dashboard</a>
+      </section>
+    </div>
 
     <main class="app-shell" id="mainContent">
       <section class="overview" aria-label="CampusPulse overview">
-        <canvas id="signalScene" class="signal-scene" aria-label="Animated campus signal network"></canvas>
         <div class="title-block">
           <p class="eyebrow">Student problems. Visible progress.</p>
           <h1>CampusPulse</h1>
