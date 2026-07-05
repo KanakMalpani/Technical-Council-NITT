@@ -35,7 +35,9 @@ const els = {
   topCategory: document.querySelector("#topCategory"),
   topIssue: document.querySelector("#topIssue"),
   totalCount: document.querySelector("#totalCount"),
-  voteCount: document.querySelector("#voteCount")
+  voteCount: document.querySelector("#voteCount"),
+  priorityBarFill: document.querySelector("#priorityBarFill"),
+  footerCsvLink: document.querySelector("#footerCsvLink")
 };
 
 function initSignalScene() {
@@ -57,7 +59,7 @@ function initSignalScene() {
   const group = new THREE.Group();
   scene.add(group);
 
-  const colors = [0x147c72, 0xe85d4f, 0xc7df5f, 0xf4b63f, 0x3c6e91];
+  const colors = [0x22c55e, 0x38bdf8, 0xf97316, 0xeab308, 0x14b8a6];
   const nodeGeometry = new THREE.IcosahedronGeometry(0.075, 2);
   const nodes = [];
   const nodePositions = [];
@@ -85,9 +87,9 @@ function initSignalScene() {
   }
 
   const lineMaterial = new THREE.LineBasicMaterial({
-    color: 0x147c72,
+    color: 0x22c55e,
     transparent: true,
-    opacity: 0.18
+    opacity: 0.16
   });
   const linePoints = [];
   for (let i = 0; i < nodePositions.length; i++) {
@@ -102,9 +104,9 @@ function initSignalScene() {
   group.add(new THREE.LineSegments(lineGeometry, lineMaterial));
 
   const ringMaterial = new THREE.MeshStandardMaterial({
-    color: 0xc7df5f,
-    emissive: 0xc7df5f,
-    emissiveIntensity: 0.18,
+    color: 0x38bdf8,
+    emissive: 0x38bdf8,
+    emissiveIntensity: 0.2,
     transparent: true,
     opacity: 0.72,
     roughness: 0.28
@@ -204,15 +206,41 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+function animateValue(element, nextValue, suffix = "") {
+  if (!element) return;
+  const target = Number(nextValue) || 0;
+  const current = Number(element.dataset.count ?? element.textContent) || 0;
+  if (current === target && !suffix) {
+    element.textContent = String(target);
+    element.dataset.count = String(target);
+    return;
+  }
+  const start = performance.now();
+  const duration = 520;
+  function step(now) {
+    const progress = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const value = Math.round(current + (target - current) * eased);
+    element.textContent = `${value}${suffix}`;
+    if (progress < 1) requestAnimationFrame(step);
+    else element.dataset.count = String(target);
+  }
+  requestAnimationFrame(step);
+}
+
 function renderStats(stats) {
-  els.totalCount.textContent = stats.total;
-  els.openCount.textContent = stats.open;
-  els.resolvedCount.textContent = stats.resolved;
+  animateValue(els.totalCount, stats.total);
+  animateValue(els.openCount, stats.open);
+  animateValue(els.resolvedCount, stats.resolved);
   els.resolutionRate.textContent = `${stats.resolutionRate}%`;
   els.topCategory.textContent = stats.topCategory;
   els.topIssue.textContent = stats.topIssue;
-  els.voteCount.textContent = stats.votes;
-  els.averagePriority.textContent = stats.averagePriority;
+  animateValue(els.voteCount, stats.votes);
+  animateValue(els.averagePriority, stats.averagePriority);
+  if (els.priorityBarFill) {
+    const width = Math.min(100, Math.max(8, Math.round((stats.averagePriority / 220) * 100)));
+    els.priorityBarFill.style.width = `${width}%`;
+  }
   renderRunway(stats);
 }
 
@@ -222,7 +250,7 @@ function renderRunway(stats) {
     "Reported": "var(--coral)",
     "Triaged": "var(--gold)",
     "In Progress": "var(--blue)",
-    "Resolved": "var(--teal)"
+    "Resolved": "var(--primary)"
   };
   els.statusRunway.innerHTML = (stats.statusBreakdown || []).map(item => {
     const width = Math.max(7, Math.round((item.count / total) * 100));
@@ -330,6 +358,7 @@ async function refresh() {
   ]);
   state.issues = issues;
   els.csvLink.href = `/api/issues.csv?${params}`;
+  if (els.footerCsvLink) els.footerCsvLink.href = els.csvLink.href;
   renderStats(stats);
   renderIssues();
 }
@@ -419,6 +448,9 @@ els.closeDetail.addEventListener("click", () => {
 els.search.addEventListener("input", debounce(refresh));
 
 initSignalScene();
-refresh().catch(error => {
-  els.issueList.innerHTML = `<p class="empty">${escapeHtml(error.message)}</p>`;
-});
+refresh()
+  .then(() => document.body.classList.add("loaded"))
+  .catch(error => {
+    document.body.classList.add("loaded");
+    els.issueList.innerHTML = `<p class="empty">${escapeHtml(error.message)}</p>`;
+  });

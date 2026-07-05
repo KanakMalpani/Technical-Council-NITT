@@ -1,38 +1,41 @@
 # CampusPulse Design System
 
-## Style Prompt
+Generated with **UI UX Pro Max** (Bento Grid + Flat SaaS) and motion principles inspired by **HyperFrames** frame-reveal timing.
 
-CampusPulse should feel like a quiet, capable campus operations console: student-led, warm, credible, and practical. The interface should communicate civic action and visible progress, not a startup landing page. It should be dense enough for repeated use, but still approachable for first-year students.
+## Visual Direction
+
+CampusPulse should feel like a modern civic-tech product students would actually open daily: confident dark hero, crisp white workspace, green progress accents, and cinematic but restrained motion.
+
+## Pattern
+
+- Hero bento grid for impact metrics and spotlight issue
+- Pipeline runway for operational transparency
+- Three-panel workspace for intake, tracker, and detail
 
 ## Colors
 
-- `#10201b` - ink, primary text and high-emphasis surfaces.
-- `#f7f2e8` - paper, page background.
-- `#fffaf0` - panel, active work surfaces.
-- `#147c72` - teal, progress and system trust.
-- `#e85d4f` - coral, urgent new signals.
-- `#c7df5f` - lime, positive action and priority highlights.
-- `#f4b63f` - gold, triage and attention states.
-- `#3c6e91` - blue, work in progress.
+| Token | Value | Use |
+|---|---|---|
+| `--bg-deep` | `#0b1220` | Hero background |
+| `--primary` | `#22c55e` | Progress, CTAs, resolved states |
+| `--accent` | `#38bdf8` | Secondary emphasis, 3D scene |
+| `--ink` | `#0f172a` | Primary text |
+| `--muted` | `#64748b` | Secondary text |
 
 ## Typography
 
-Use the system UI stack for speed and reliability. Headlines use heavy weights. Body text uses normal weights with generous line-height. Numeric values use tabular figures when possible.
+**Plus Jakarta Sans** — friendly SaaS dashboard tone with strong numeric hierarchy.
 
-## Interface Principles
+## Motion (HyperFrames-inspired)
 
-- The first screen is the product, not a marketing page.
-- Prioritize scan speed: metrics, filters, issue list, detail panel.
-- Use cards only for repeated items and framed work areas.
-- Keep radii at `8px` or lower.
-- Motion is subtle and deterministic.
-- All controls must be keyboard reachable with visible focus states.
-- Text must not overlap or depend on viewport-width font scaling.
+- Frame-rise entrance: `cubic-bezier(0.16, 1, 0.3, 1)` with staggered delays
+- Ambient orb drift for depth without distraction
+- Metric count-up on data refresh
+- `prefers-reduced-motion` respected globally
 
-## What Not To Do
+## Product Rules
 
-- No purple-blue generic gradients.
-- No decorative blobs or glassmorphism.
-- No large centered hero that delays the tracker.
-- No hidden actions that require guessing.
-- No invented external dependencies.
+- Dashboard-first: tracker remains one scroll away from hero
+- SVG icons only (Heroicons-style strokes)
+- Visible focus rings and keyboard selection preserved
+- No external UI dependencies beyond Google Fonts

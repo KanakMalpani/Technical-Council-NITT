@@ -3,103 +3,185 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CampusPulse | CDI Tracker</title>
+    <meta name="description" content="CampusPulse — NIT Trichy student civic tracker for reporting, prioritizing, and resolving campus issues.">
+    <title>CampusPulse | Campus Improvement Platform</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/styles.css">
   </head>
   <body>
-    <a class="skip-link" href="#mainContent">Skip to tracker</a>
-    <header class="topbar">
-      <div class="brand">
-        <span class="brand-mark" aria-hidden="true">CP</span>
-        <div>
-          <strong>CampusPulse</strong>
-          <span>NIT Trichy CDI tracker</span>
+    <div class="ambient" aria-hidden="true">
+      <div class="ambient-orb ambient-orb-a"></div>
+      <div class="ambient-orb ambient-orb-b"></div>
+      <div class="ambient-grid"></div>
+    </div>
+
+    <a class="skip-link" href="#mainContent">Skip to dashboard</a>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="/">
+          <span class="brand-mark" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v10l9 5 9-5V7l-9-5Z" stroke="currentColor" stroke-width="1.8"/><path d="M12 12 3 7M12 12l9-5M12 12v10" stroke="currentColor" stroke-width="1.8"/></svg>
+          </span>
+          <div>
+            <strong>CampusPulse</strong>
+            <span>NIT Trichy · Technical Council CDI</span>
+          </div>
+        </a>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="#overview">Overview</a>
+          <a href="#tracker">Tracker</a>
+          <a href="#newReport">Report</a>
+        </nav>
+        <div class="header-actions">
+          <span class="live-pill"><span class="live-dot"></span> Live campus feed</span>
+          <a class="btn btn-ghost" id="csvLink" href="/api/issues.csv">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 19h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Export CSV
+          </a>
+          <a class="btn btn-primary" href="#newReport">Raise signal</a>
         </div>
-      </div>
-      <div class="topbar-actions">
-        <a class="button ghost" id="csvLink" href="/api/issues.csv">Export CSV</a>
-        <a class="button dark" href="#newReport">New signal</a>
       </div>
     </header>
 
-    <main class="app-shell" id="mainContent">
-      <section class="overview" aria-label="CampusPulse overview">
-        <canvas id="signalScene" class="signal-scene" aria-label="Animated campus signal network"></canvas>
-        <div class="title-block">
-          <p class="eyebrow">Student problems. Visible progress.</p>
-          <h1>CampusPulse</h1>
-          <p>Report, prioritize, and track campus improvement signals from one student-facing dashboard.</p>
-        </div>
-        <div class="metric-grid" aria-label="Impact metrics">
-          <article class="metric">
-            <span>Total signals</span>
-            <strong id="totalCount">0</strong>
-          </article>
-          <article class="metric">
-            <span>Open</span>
-            <strong id="openCount">0</strong>
-          </article>
-          <article class="metric">
-            <span>Resolved</span>
-            <strong id="resolvedCount">0</strong>
-          </article>
-          <article class="metric accent">
-            <span>Resolution rate</span>
-            <strong id="resolutionRate">0%</strong>
-          </article>
+    <main id="mainContent">
+      <section class="hero" id="overview" aria-label="CampusPulse overview">
+        <canvas id="signalScene" class="hero-scene" aria-hidden="true"></canvas>
+        <div class="hero-inner">
+          <div class="hero-copy frame-in" style="--frame-delay: 0ms">
+            <p class="eyebrow">Campus Development Initiative</p>
+            <h1>Turn campus friction into visible progress.</h1>
+            <p class="hero-lede">Students report real issues, vote on what matters, and follow every signal from first report to resolution — built for NIT Trichy.</p>
+            <div class="hero-actions">
+              <a class="btn btn-primary btn-lg" href="#newReport">Report an issue</a>
+              <a class="btn btn-outline btn-lg" href="#tracker">Browse tracker</a>
+            </div>
+            <ul class="hero-trust">
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="1.8"/></svg>
+                Transparent timelines
+              </li>
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" stroke="currentColor" stroke-width="1.8"/></svg>
+                Student-led prioritization
+              </li>
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="currentColor" stroke-width="1.8"/></svg>
+                Priority scoring built-in
+              </li>
+            </ul>
+          </div>
+
+          <div class="bento frame-in" style="--frame-delay: 80ms">
+            <article class="bento-card bento-metric">
+              <span class="metric-label">Total signals</span>
+              <strong class="metric-value" id="totalCount" data-count="0">0</strong>
+              <p class="metric-foot">Across all campus categories</p>
+            </article>
+            <article class="bento-card bento-metric bento-accent">
+              <span class="metric-label">Open now</span>
+              <strong class="metric-value" id="openCount" data-count="0">0</strong>
+              <p class="metric-foot">Awaiting action or triage</p>
+            </article>
+            <article class="bento-card bento-metric">
+              <span class="metric-label">Resolved</span>
+              <strong class="metric-value" id="resolvedCount" data-count="0">0</strong>
+              <p class="metric-foot">Closed with visible outcome</p>
+            </article>
+            <article class="bento-card bento-metric bento-highlight">
+              <span class="metric-label">Resolution rate</span>
+              <strong class="metric-value" id="resolutionRate">0%</strong>
+              <p class="metric-foot">Campus improvement velocity</p>
+            </article>
+            <article class="bento-card bento-spotlight">
+              <span class="metric-label">Top priority signal</span>
+              <strong id="topIssue">Loading campus feed…</strong>
+              <div class="spotlight-meta">
+                <span class="pill pill-teal" id="topCategory">—</span>
+                <span class="pill pill-muted"><span id="voteCount">0</span> total votes</span>
+              </div>
+            </article>
+            <article class="bento-card bento-priority">
+              <span class="metric-label">Average priority score</span>
+              <strong class="metric-value metric-value-sm" id="averagePriority">0</strong>
+              <div class="priority-bar" aria-hidden="true"><span id="priorityBarFill"></span></div>
+            </article>
+          </div>
         </div>
       </section>
 
-      <section class="insight-strip">
-        <div>
-          <span>Top category</span>
-          <strong id="topCategory">Loading...</strong>
-        </div>
-        <div>
-          <span>Top priority</span>
-          <strong id="topIssue">Loading...</strong>
-        </div>
-        <div>
-          <span>Total votes</span>
-          <strong id="voteCount">0</strong>
-        </div>
-      </section>
-
-      <section class="signal-runway" aria-label="Signal runway">
-        <div class="runway-header">
+      <section class="pipeline frame-in" style="--frame-delay: 140ms" aria-label="Signal pipeline">
+        <div class="section-head">
           <div>
-            <p class="eyebrow">Runway</p>
-            <h2>From signal to solved</h2>
+            <p class="eyebrow">Pipeline</p>
+            <h2>From report to resolved</h2>
           </div>
-          <div class="avg-priority">
-            <span>Avg priority</span>
-            <strong id="averagePriority">0</strong>
-          </div>
+          <p class="section-copy">Every signal moves through a transparent runway so volunteers and students always know what stage a campus issue is in.</p>
         </div>
         <div class="status-runway" id="statusRunway"></div>
         <div class="category-heat" id="categoryHeat"></div>
       </section>
 
-      <section class="workspace">
-        <aside class="intake-panel" id="newReport">
-          <div class="section-heading">
-            <p class="eyebrow">Intake</p>
-            <h2>Raise a campus signal</h2>
-          </div>
-          <form class="report-form" id="reportForm">
-            <label>
-              Title
-              <input name="title" required minlength="6" placeholder="Water cooler near Orion is empty">
-            </label>
-            <div class="field-row">
+      <section class="platform" id="tracker" aria-label="CampusPulse workspace">
+        <div class="platform-grid">
+          <aside class="panel panel-intake" id="newReport">
+            <div class="panel-head">
+              <p class="eyebrow">New signal</p>
+              <h2>Report a campus issue</h2>
+              <p class="panel-copy">Share what is broken, where it happens, and who it affects. Your report enters the public tracker immediately.</p>
+            </div>
+            <form class="report-form" id="reportForm">
               <label>
-                Location
-                <input name="location" required placeholder="Orion first floor">
+                Issue title
+                <input name="title" required minlength="6" placeholder="Water cooler near Orion stays empty after dinner">
+              </label>
+              <div class="field-row">
+                <label>
+                  Location
+                  <input name="location" required placeholder="Orion first floor">
+                </label>
+                <label>
+                  Category
+                  <select name="category">
+                    <option>Water</option>
+                    <option>Safety</option>
+                    <option>Hostel</option>
+                    <option>Transport</option>
+                    <option>Labs</option>
+                    <option>General</option>
+                  </select>
+                </label>
+              </div>
+              <label>
+                Contact <span class="optional">optional</span>
+                <input name="contact" placeholder="Name or email for follow-up">
               </label>
               <label>
-                Category
-                <select name="category">
+                Description
+                <textarea name="description" required minlength="12" placeholder="What is happening, who is affected, and what would improve campus life?"></textarea>
+              </label>
+              <button class="btn btn-primary btn-block" type="submit">Submit to CampusPulse</button>
+              <p class="form-message" id="formMessage" role="status"></p>
+            </form>
+          </aside>
+
+          <section class="panel panel-tracker">
+            <div class="panel-head panel-head-row">
+              <div>
+                <p class="eyebrow">Live tracker</p>
+                <h2>Prioritized campus signals</h2>
+              </div>
+              <div class="filters">
+                <label class="sr-only" for="search">Search issues</label>
+                <div class="search-wrap">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-3-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                  <input id="search" type="search" placeholder="Search location, category, or title">
+                </div>
+                <select id="categoryFilter" aria-label="Category filter">
+                  <option value="all">All categories</option>
                   <option>Water</option>
                   <option>Safety</option>
                   <option>Hostel</option>
@@ -107,109 +189,104 @@
                   <option>Labs</option>
                   <option>General</option>
                 </select>
-              </label>
-            </div>
-            <label>
-              Contact
-              <input name="contact" placeholder="Optional name or email">
-            </label>
-            <label>
-              Description
-              <textarea name="description" required minlength="12" placeholder="What is happening, who is affected, and what would improve it?"></textarea>
-            </label>
-            <button class="button primary" type="submit">Add signal</button>
-            <p class="form-message" id="formMessage" role="status"></p>
-          </form>
-        </aside>
-
-        <section class="tracker-panel">
-          <div class="tracker-toolbar">
-            <div class="section-heading">
-              <p class="eyebrow">Tracker</p>
-              <h2>Prioritized campus signals</h2>
-            </div>
-            <div class="filters">
-            <label class="sr-only" for="search">Search issues</label>
-            <input id="search" type="search" placeholder="Search location, category, issue">
-              <select id="categoryFilter" aria-label="Category filter">
-                <option value="all">All categories</option>
-                <option>Water</option>
-                <option>Safety</option>
-                <option>Hostel</option>
-                <option>Transport</option>
-                <option>Labs</option>
-                <option>General</option>
-              </select>
-              <select id="statusFilter" aria-label="Status filter">
-                <option value="all">All statuses</option>
-                <option>Reported</option>
-                <option>Triaged</option>
-                <option>In Progress</option>
-                <option>Resolved</option>
-              </select>
-              <select id="sortBy" aria-label="Sort issues">
-                <option value="priority">Priority</option>
-                <option value="newest">Newest</option>
-                <option value="votes">Votes</option>
-                <option value="status">Status</option>
-              </select>
-            </div>
-          </div>
-          <div class="issue-list" id="issueList" aria-live="polite"></div>
-        </section>
-
-        <aside class="detail-panel" id="detailPanel">
-          <div class="empty-detail" id="emptyDetail">
-            <p class="eyebrow">Detail</p>
-            <h2>Select a signal</h2>
-            <p>Open an issue from the tracker to view its timeline, change status, or add a progress note.</p>
-          </div>
-
-          <div class="issue-detail hidden" id="issueDetail">
-            <div class="detail-header">
-              <div>
-                <p class="eyebrow" id="detailCategory">Category</p>
-                <h2 id="detailTitle">Issue title</h2>
-              </div>
-              <button class="icon-button" id="closeDetail" type="button" aria-label="Close detail">X</button>
-            </div>
-            <div class="detail-meta" id="detailMeta"></div>
-            <p class="detail-description" id="detailDescription"></p>
-            <div class="next-action">
-              <span>Next best action</span>
-              <strong id="nextAction">Select a signal to generate an action.</strong>
-            </div>
-
-            <form class="status-form" id="statusForm">
-              <label>
-                Status
-                <select name="status">
+                <select id="statusFilter" aria-label="Status filter">
+                  <option value="all">All statuses</option>
                   <option>Reported</option>
                   <option>Triaged</option>
                   <option>In Progress</option>
                   <option>Resolved</option>
                 </select>
-              </label>
-              <button class="button dark" type="submit">Update status</button>
-            </form>
-
-            <form class="note-form" id="noteForm">
-              <label>
-                Progress note
-                <textarea name="message" minlength="8" placeholder="Example: Shared with hostel office for review"></textarea>
-              </label>
-              <input name="author" placeholder="Author">
-              <button class="button ghost" type="submit">Add note</button>
-            </form>
-
-            <div class="timeline">
-              <h3>Timeline</h3>
-              <ol id="timelineList"></ol>
+                <select id="sortBy" aria-label="Sort issues">
+                  <option value="priority">Priority</option>
+                  <option value="newest">Newest</option>
+                  <option value="votes">Votes</option>
+                  <option value="status">Status</option>
+                </select>
+              </div>
             </div>
-          </div>
-        </aside>
+            <div class="issue-list" id="issueList" aria-live="polite"></div>
+          </section>
+
+          <aside class="panel panel-detail" id="detailPanel">
+            <div class="empty-detail" id="emptyDetail">
+              <div class="empty-icon" aria-hidden="true">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="currentColor" stroke-width="1.8"/></svg>
+              </div>
+              <p class="eyebrow">Issue detail</p>
+              <h2>Select a signal</h2>
+              <p>Choose an issue from the tracker to inspect its timeline, update status, or add a volunteer note.</p>
+            </div>
+
+            <div class="issue-detail hidden" id="issueDetail">
+              <div class="detail-header">
+                <div>
+                  <p class="eyebrow" id="detailCategory">Category</p>
+                  <h2 id="detailTitle">Issue title</h2>
+                </div>
+                <button class="icon-btn" id="closeDetail" type="button" aria-label="Close detail">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </button>
+              </div>
+              <div class="detail-meta" id="detailMeta"></div>
+              <p class="detail-description" id="detailDescription"></p>
+              <div class="next-action">
+                <span>Recommended next step</span>
+                <strong id="nextAction">Select a signal to generate an action.</strong>
+              </div>
+
+              <form class="status-form" id="statusForm">
+                <label>
+                  Update status
+                  <select name="status">
+                    <option>Reported</option>
+                    <option>Triaged</option>
+                    <option>In Progress</option>
+                    <option>Resolved</option>
+                  </select>
+                </label>
+                <button class="btn btn-dark btn-block" type="submit">Save status</button>
+              </form>
+
+              <form class="note-form" id="noteForm">
+                <label>
+                  Progress note
+                  <textarea name="message" minlength="8" placeholder="Example: Escalated to hostel office for review"></textarea>
+                </label>
+                <label>
+                  Author
+                  <input name="author" placeholder="CampusPulse volunteer">
+                </label>
+                <button class="btn btn-outline btn-block" type="submit">Add timeline note</button>
+              </form>
+
+              <div class="timeline">
+                <h3>Activity timeline</h3>
+                <ol id="timelineList"></ol>
+              </div>
+            </div>
+          </aside>
+        </div>
       </section>
     </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div>
+          <strong>CampusPulse</strong>
+          <p>A Technical Council CDI prototype for student-visible campus improvement at NIT Trichy.</p>
+        </div>
+        <div class="footer-links">
+          <a href="#overview">Overview</a>
+          <a href="#tracker">Tracker</a>
+          <a href="#newReport">Report issue</a>
+          <a id="footerCsvLink" href="/api/issues.csv">Download CSV</a>
+        </div>
+      </div>
+    </footer>
+
+    <a class="fab" href="#newReport" aria-label="Raise new campus signal">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </a>
 
     <script type="module" src="/app.js"></script>
   </body>
