@@ -1,41 +1,38 @@
 # CampusPulse Design System
 
-Generated with **UI UX Pro Max** (Bento Grid + Flat SaaS) and motion principles inspired by **HyperFrames** frame-reveal timing.
+## Style Prompt
 
-## Visual Direction
+CampusPulse should feel like a quiet, capable campus operations console: student-led, warm, credible, and practical. The interface should communicate civic action and visible progress, not a startup landing page. It should be dense enough for repeated use, but still approachable for first-year students.
 
-CampusPulse should feel like a modern civic-tech product students would actually open daily: confident dark hero, crisp white workspace, green progress accents, and cinematic but restrained motion.
-
-## Pattern
-
-- Hero bento grid for impact metrics and spotlight issue
-- Pipeline runway for operational transparency
-- Three-panel workspace for intake, tracker, and detail
+The product intro uses an Apple-inspired scroll showcase: sticky viewport, cross-fading headlines, and a device preview that updates as you scroll through Report → Vote → Prioritize → Resolve. The operational dashboard below keeps every original metric, insight strip, runway, and workspace panel.
 
 ## Colors
 
-| Token | Value | Use |
-|---|---|---|
-| `--bg-deep` | `#0b1220` | Hero background |
-| `--primary` | `#22c55e` | Progress, CTAs, resolved states |
-| `--accent` | `#38bdf8` | Secondary emphasis, 3D scene |
-| `--ink` | `#0f172a` | Primary text |
-| `--muted` | `#64748b` | Secondary text |
+- `#10201b` - ink, primary text and high-emphasis surfaces.
+- `#f7f2e8` - paper, page background.
+- `#fffaf0` - panel, active work surfaces.
+- `#147c72` - teal, progress and system trust.
+- `#e85d4f` - coral, urgent new signals.
+- `#c7df5f` - lime, positive action and priority highlights.
+- `#f4b63f` - gold, triage and attention states.
+- `#3c6e91` - blue, work in progress.
 
 ## Typography
 
-**Plus Jakarta Sans** — friendly SaaS dashboard tone with strong numeric hierarchy.
+Use the system UI stack for speed and reliability. Headlines use heavy weights. Body text uses normal weights with generous line-height. Numeric values use tabular figures when possible.
 
-## Motion (HyperFrames-inspired)
+## Interface Principles
 
-- Frame-rise entrance: `cubic-bezier(0.16, 1, 0.3, 1)` with staggered delays
-- Ambient orb drift for depth without distraction
-- Metric count-up on data refresh
-- `prefers-reduced-motion` respected globally
+- The first screen is the product, not a marketing page — but a short Apple-style scroll intro may precede the dashboard.
+- Prioritize scan speed: metrics, insight strip, filters, issue list, detail panel.
+- Use cards only for repeated items and framed work areas.
+- Keep radii at `8px` or lower on dashboard surfaces.
+- Motion is subtle and deterministic; scroll-driven product beats use Apple-style easing.
+- All controls must be keyboard reachable with visible focus states.
 
-## Product Rules
+## What Not To Do
 
-- Dashboard-first: tracker remains one scroll away from hero
-- SVG icons only (Heroicons-style strokes)
-- Visible focus rings and keyboard selection preserved
-- No external UI dependencies beyond Google Fonts
+- No purple-blue generic gradients on the dashboard.
+- No decorative blobs or glassmorphism on operational panels.
+- Do not remove insight metrics, runway data, or workspace functionality for visual simplification.
+- No hidden actions that require guessing.

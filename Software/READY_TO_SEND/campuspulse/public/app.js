@@ -35,9 +35,51 @@ const els = {
   topCategory: document.querySelector("#topCategory"),
   topIssue: document.querySelector("#topIssue"),
   totalCount: document.querySelector("#totalCount"),
-  voteCount: document.querySelector("#voteCount"),
-  priorityBarFill: document.querySelector("#priorityBarFill"),
-  footerCsvLink: document.querySelector("#footerCsvLink")
+  voteCount: document.querySelector("#voteCount")
+};
+
+const APPLE_BEATS = [
+  {
+    kicker: "Step one",
+    headline: "Report what you see.",
+    subhead: "Students raise campus signals with location, category, and context in seconds.",
+    cardTitle: "Raise a signal",
+    cardCopy: "Every report enters the public tracker with a timestamp and timeline."
+  },
+  {
+    kicker: "Step two",
+    headline: "Vote on what matters.",
+    subhead: "Community votes help Technical Council understand which issues need attention first.",
+    cardTitle: "One tap to vote",
+    cardCopy: "Votes feed directly into the priority score for each campus signal."
+  },
+  {
+    kicker: "Step three",
+    headline: "Prioritize with clarity.",
+    subhead: "CampusPulse scores urgency using votes, age, and status so the right issues surface.",
+    cardTitle: "Smart priority scoring",
+    cardCopy: "Filter, search, and sort the tracker to focus on the highest-impact signals."
+  },
+  {
+    kicker: "Step four",
+    headline: "Track until resolved.",
+    subhead: "Volunteers update status, add notes, and keep every step visible to students.",
+    cardTitle: "Transparent timelines",
+    cardCopy: "From Reported to Resolved, nothing disappears into informal channels."
+  }
+];
+
+const appleEls = {
+  track: document.querySelector("#appleScrollTrack"),
+  kicker: document.querySelector("[data-apple-kicker]"),
+  headline: document.querySelector("[data-apple-headline]"),
+  subhead: document.querySelector("[data-apple-subhead]"),
+  cardTitle: document.querySelector("[data-apple-card-title]"),
+  cardCopy: document.querySelector("[data-apple-card-copy]"),
+  metricA: document.querySelector("[data-apple-metric-a]"),
+  metricB: document.querySelector("[data-apple-metric-b]"),
+  metricC: document.querySelector("[data-apple-metric-c]"),
+  steps: [...document.querySelectorAll(".apple-step")]
 };
 
 function initSignalScene() {
@@ -59,7 +101,7 @@ function initSignalScene() {
   const group = new THREE.Group();
   scene.add(group);
 
-  const colors = [0x22c55e, 0x38bdf8, 0xf97316, 0xeab308, 0x14b8a6];
+  const colors = [0x147c72, 0xe85d4f, 0xc7df5f, 0xf4b63f, 0x3c6e91];
   const nodeGeometry = new THREE.IcosahedronGeometry(0.075, 2);
   const nodes = [];
   const nodePositions = [];
@@ -87,9 +129,9 @@ function initSignalScene() {
   }
 
   const lineMaterial = new THREE.LineBasicMaterial({
-    color: 0x22c55e,
+    color: 0x147c72,
     transparent: true,
-    opacity: 0.16
+    opacity: 0.18
   });
   const linePoints = [];
   for (let i = 0; i < nodePositions.length; i++) {
@@ -104,9 +146,9 @@ function initSignalScene() {
   group.add(new THREE.LineSegments(lineGeometry, lineMaterial));
 
   const ringMaterial = new THREE.MeshStandardMaterial({
-    color: 0x38bdf8,
-    emissive: 0x38bdf8,
-    emissiveIntensity: 0.2,
+    color: 0xc7df5f,
+    emissive: 0xc7df5f,
+    emissiveIntensity: 0.18,
     transparent: true,
     opacity: 0.72,
     roughness: 0.28
@@ -206,42 +248,17 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-function animateValue(element, nextValue, suffix = "") {
-  if (!element) return;
-  const target = Number(nextValue) || 0;
-  const current = Number(element.dataset.count ?? element.textContent) || 0;
-  if (current === target && !suffix) {
-    element.textContent = String(target);
-    element.dataset.count = String(target);
-    return;
-  }
-  const start = performance.now();
-  const duration = 520;
-  function step(now) {
-    const progress = Math.min(1, (now - start) / duration);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    const value = Math.round(current + (target - current) * eased);
-    element.textContent = `${value}${suffix}`;
-    if (progress < 1) requestAnimationFrame(step);
-    else element.dataset.count = String(target);
-  }
-  requestAnimationFrame(step);
-}
-
 function renderStats(stats) {
-  animateValue(els.totalCount, stats.total);
-  animateValue(els.openCount, stats.open);
-  animateValue(els.resolvedCount, stats.resolved);
+  els.totalCount.textContent = stats.total;
+  els.openCount.textContent = stats.open;
+  els.resolvedCount.textContent = stats.resolved;
   els.resolutionRate.textContent = `${stats.resolutionRate}%`;
   els.topCategory.textContent = stats.topCategory;
   els.topIssue.textContent = stats.topIssue;
-  animateValue(els.voteCount, stats.votes);
-  animateValue(els.averagePriority, stats.averagePriority);
-  if (els.priorityBarFill) {
-    const width = Math.min(100, Math.max(8, Math.round((stats.averagePriority / 220) * 100)));
-    els.priorityBarFill.style.width = `${width}%`;
-  }
+  els.voteCount.textContent = stats.votes;
+  els.averagePriority.textContent = stats.averagePriority;
   renderRunway(stats);
+  updateAppleShowcase(stats);
 }
 
 function renderRunway(stats) {
@@ -250,7 +267,7 @@ function renderRunway(stats) {
     "Reported": "var(--coral)",
     "Triaged": "var(--gold)",
     "In Progress": "var(--blue)",
-    "Resolved": "var(--primary)"
+    "Resolved": "var(--teal)"
   };
   els.statusRunway.innerHTML = (stats.statusBreakdown || []).map(item => {
     const width = Math.max(7, Math.round((item.count / total) * 100));
@@ -358,9 +375,88 @@ async function refresh() {
   ]);
   state.issues = issues;
   els.csvLink.href = `/api/issues.csv?${params}`;
-  if (els.footerCsvLink) els.footerCsvLink.href = els.csvLink.href;
   renderStats(stats);
   renderIssues();
+}
+
+function updateAppleShowcase(stats) {
+  if (!appleEls.metricA) return;
+  appleEls.metricA.textContent = stats.total;
+  appleEls.metricB.textContent = stats.open;
+  appleEls.metricC.textContent = stats.resolved;
+  if (stats.topIssue && stats.topIssue !== "Loading...") {
+    APPLE_BEATS[2].cardTitle = stats.topIssue;
+    APPLE_BEATS[2].cardCopy = `Top category: ${stats.topCategory}. Live priority scoring keeps the most urgent campus signals visible.`;
+  }
+}
+
+function initAppleScroll() {
+  if (!appleEls.track || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    applyAppleBeat(0);
+    return;
+  }
+
+  let ticking = false;
+
+  function update() {
+    ticking = false;
+    const rect = appleEls.track.getBoundingClientRect();
+    const scrollable = appleEls.track.offsetHeight - window.innerHeight;
+    if (scrollable <= 0) return;
+
+    const progress = Math.min(1, Math.max(0, -rect.top / scrollable));
+    const stepIndex = Math.min(APPLE_BEATS.length - 1, Math.floor(progress * APPLE_BEATS.length));
+    const local = (progress * APPLE_BEATS.length) - stepIndex;
+    applyAppleBeat(stepIndex, local);
+  }
+
+  function onScroll() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  update();
+}
+
+function applyAppleBeat(index, local = 0) {
+  const beat = APPLE_BEATS[index];
+  if (!beat) return;
+
+  appleEls.kicker.textContent = beat.kicker;
+  appleEls.headline.textContent = beat.headline;
+  appleEls.subhead.textContent = beat.subhead;
+  appleEls.cardTitle.textContent = beat.cardTitle;
+  appleEls.cardCopy.textContent = beat.cardCopy;
+
+  appleEls.steps.forEach((step, i) => {
+    step.classList.toggle("is-active", i === index);
+  });
+
+  const fade = 1 - Math.min(1, Math.abs(local - 0.5) * 2);
+  const y = (0.5 - local) * 28;
+  const scale = 0.96 + fade * 0.04;
+  appleEls.track.style.setProperty("--apple-copy-opacity", String(0.35 + fade * 0.65));
+  appleEls.track.style.setProperty("--apple-copy-y", `${y}px`);
+  appleEls.track.style.setProperty("--apple-headline-scale", String(scale));
+  appleEls.track.style.setProperty("--apple-device-y", `${y * 0.6}px`);
+  appleEls.track.style.setProperty("--apple-device-scale", String(0.94 + fade * 0.06));
+  appleEls.track.style.setProperty("--apple-device-opacity", String(0.5 + fade * 0.5));
+}
+
+function initRevealOnScroll() {
+  const blocks = document.querySelectorAll(".overview, .insight-strip, .signal-runway, .workspace");
+  blocks.forEach(block => block.classList.add("reveal-on-scroll"));
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add("is-visible");
+    });
+  }, { threshold: 0.12 });
+
+  blocks.forEach(block => observer.observe(block));
 }
 
 function debounce(fn, delay = 180) {
@@ -448,9 +544,8 @@ els.closeDetail.addEventListener("click", () => {
 els.search.addEventListener("input", debounce(refresh));
 
 initSignalScene();
-refresh()
-  .then(() => document.body.classList.add("loaded"))
-  .catch(error => {
-    document.body.classList.add("loaded");
-    els.issueList.innerHTML = `<p class="empty">${escapeHtml(error.message)}</p>`;
-  });
+initAppleScroll();
+initRevealOnScroll();
+refresh().catch(error => {
+  els.issueList.innerHTML = `<p class="empty">${escapeHtml(error.message)}</p>`;
+});
