@@ -1,0 +1,19 @@
+{
+  "name": "campuspulse",
+  "version": "1.0.0",
+  "description": "CampusPulse is a CDI web app for reporting, voting on, and tracking campus improvement issues.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "campus",
+    "cdi",
+    "nit-trichy",
+    "student-initiatives"
+  ],
+  "author": "Technical Council Induction Applicant",
+  "license": "MIT"
+}

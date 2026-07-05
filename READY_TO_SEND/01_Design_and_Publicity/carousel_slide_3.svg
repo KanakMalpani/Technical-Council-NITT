@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <rect width="1080" height="1080" fill="#f7f2e8" />
+  <circle cx="930" cy="170" r="140" fill="#c7df5f" opacity="0.95" />
+  <circle cx="910" cy="190" r="84" fill="#f7f2e8" />
+  <circle cx="890" cy="210" r="36" fill="#e85d4f" />
+  <rect x="64" y="64" width="228" height="54" rx="8" fill="#10201b" />
+  <text x="88" y="101" font-size="27" font-weight="800" fill="#c7df5f">CampusPulse</text>
+  <text x="64" y="178" font-size="88" font-weight="900" fill="#10201b">Meet CampusPulse</text>
+  <text x="68" y="282" font-size="33" fill="#5b6762">A student-powered issue tracker where reports become priorities and priorities become action.</text>
+  <path d="M70 410 C260 350 348 470 510 412 S808 348 1000 430" fill="none" stroke="#e85d4f" stroke-width="16" stroke-linecap="round" />
+  <path d="M70 468 C260 408 348 528 510 470 S808 406 1000 488" fill="none" stroke="#147c72" stroke-width="10" stroke-linecap="round" />
+  
+  <rect x="84" y="560" width="912" height="118" rx="8" fill="#c7df5f" />
+  <text x="120" y="605" font-size="31" font-weight="800" fill="#10201b">Report</text>
+  <text x="120" y="644" font-size="24" fill="#10201b">Raise a campus signal with category and location</text>
+  <rect x="84" y="706" width="912" height="118" rx="8" fill="#f4b63f" />
+  <text x="120" y="751" font-size="31" font-weight="800" fill="#10201b">Vote</text>
+  <text x="120" y="790" font-size="24" fill="#10201b">Help Technical Council see what matters most</text>
+  <rect x="84" y="852" width="912" height="118" rx="8" fill="#d8efe8" />
+  <text x="120" y="897" font-size="31" font-weight="800" fill="#10201b">Track</text>
+  <text x="120" y="936" font-size="24" fill="#10201b">Follow status from reported to resolved</text>
+  <text x="64" y="1002" font-size="25" font-weight="800" fill="#10201b">NIT Trichy Technical Council | Campus Development Initiative</text>
+</svg>

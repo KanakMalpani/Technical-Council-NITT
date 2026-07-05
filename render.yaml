@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: campuspulse
+    runtime: docker
+    rootDir: Software/READY_TO_SEND/campuspulse
+    dockerfilePath: Dockerfile
+    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: 3000

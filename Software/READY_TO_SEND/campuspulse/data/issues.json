@@ -1,0 +1,106 @@
+[
+  {
+    "id": "seed-water-at-octagon",
+    "title": "Refill station near Octagon runs dry after dinner",
+    "location": "Octagon entrance",
+    "category": "Water",
+    "description": "Students returning from labs often find the refill station empty or slow. A maintenance alert and refill schedule would help.",
+    "status": "In Progress",
+    "votes": 42,
+    "contact": "Anonymous first-year student",
+    "createdAt": "2026-07-01T10:30:00.000Z",
+    "updatedAt": "2026-07-04T09:30:00.000Z",
+    "updates": [
+      {
+        "at": "2026-07-01T10:30:00.000Z",
+        "type": "status",
+        "message": "Issue reported to CampusPulse.",
+        "author": "Anonymous first-year student"
+      },
+      {
+        "at": "2026-07-02T14:00:00.000Z",
+        "type": "status",
+        "message": "Status changed to Triaged.",
+        "author": "Technical Council"
+      },
+      {
+        "at": "2026-07-04T09:30:00.000Z",
+        "type": "note",
+        "message": "Mapped peak usage hours and proposed a refill reminder board.",
+        "author": "CampusPulse volunteer"
+      }
+    ]
+  },
+  {
+    "id": "seed-hostel-lighting",
+    "title": "Dark pathway between hostel blocks",
+    "location": "Hostel zone pathway",
+    "category": "Safety",
+    "description": "The path between the hostel blocks and mess area has weak lighting, especially near the curve.",
+    "status": "Triaged",
+    "votes": 37,
+    "contact": "Hostel resident",
+    "createdAt": "2026-07-02T08:15:00.000Z",
+    "updatedAt": "2026-07-03T18:10:00.000Z",
+    "updates": [
+      {
+        "at": "2026-07-02T08:15:00.000Z",
+        "type": "status",
+        "message": "Issue reported to CampusPulse.",
+        "author": "Hostel resident"
+      },
+      {
+        "at": "2026-07-03T18:10:00.000Z",
+        "type": "status",
+        "message": "Status changed to Triaged.",
+        "author": "Technical Council"
+      }
+    ]
+  },
+  {
+    "id": "seed-laundry-queue",
+    "title": "Laundry queue status is hard to predict",
+    "location": "Hostel laundry room",
+    "category": "Hostel",
+    "description": "A shared queue status would save students repeated trips and reduce crowding during peak hours.",
+    "status": "Reported",
+    "votes": 26,
+    "contact": "Laundry room user",
+    "createdAt": "2026-07-03T16:45:00.000Z",
+    "updatedAt": "2026-07-03T16:45:00.000Z",
+    "updates": [
+      {
+        "at": "2026-07-03T16:45:00.000Z",
+        "type": "status",
+        "message": "Issue reported to CampusPulse.",
+        "author": "Laundry room user"
+      }
+    ]
+  },
+  {
+    "id": "seed-cycle-repair",
+    "title": "Cycle repair demand spikes before 8 AM classes",
+    "location": "Main gate cycle stand",
+    "category": "Transport",
+    "description": "A weekly pop-up repair slot or student volunteer rota could reduce last-minute cycle breakdown issues.",
+    "status": "Resolved",
+    "votes": 19,
+    "contact": "Commuter",
+    "createdAt": "2026-06-29T11:20:00.000Z",
+    "updatedAt": "2026-07-01T12:00:00.000Z",
+    "updates": [
+      {
+        "at": "2026-06-29T11:20:00.000Z",
+        "type": "status",
+        "message": "Issue reported to CampusPulse.",
+        "author": "Commuter"
+      },
+      {
+        "at": "2026-07-01T12:00:00.000Z",
+        "type": "status",
+        "message": "Status changed to Resolved.",
+        "author": "Technical Council"
+      }
+    ]
+  }
+]
